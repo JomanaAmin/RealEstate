@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.DAL.Entities
 {
-    internal class Property
+    public class Property
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,18 @@ namespace RealEstate.DAL.Entities
         public string ContactPhone { get; set; }
         public string ContactWhatsapp { get; set; }
 
+        public DateTime CreatedAt { get; set; } 
+
+        public List<PropertyImage> Images { get; set; }
 
     }
+
+    public class PropertyImage
+    {
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
+        public int PropertyId { get; set; }
+        public Property Property { get; set; }
+    }
+
 }
