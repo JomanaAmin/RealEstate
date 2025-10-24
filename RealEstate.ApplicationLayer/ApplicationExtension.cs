@@ -16,6 +16,8 @@ namespace RealEstate.ApplicationLayer
         public static IServiceCollection AddApplicationLayer(this IServiceCollection service) 
         {
             service.AddScoped<IPropertyService,PropertyService>();
+            service.AddScoped<ICategoryService, CategoryService>();
+            service.AddScoped<IPropertyTypeService, PropertyTypeService>();
             return service;
         }
     }

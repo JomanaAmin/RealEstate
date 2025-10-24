@@ -1,5 +1,7 @@
 
+using Microsoft.EntityFrameworkCore.Metadata;
 using RealEstate.ApplicationLayer;
+using RealEstate.ApplicationLayer.Contracts;
 using RealEstate.DAL;
 
 namespace RealEstate.API
@@ -16,6 +18,7 @@ namespace RealEstate.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddDataAccessLayer(builder.Configuration).AddApplicationLayer();
             var app = builder.Build();
 

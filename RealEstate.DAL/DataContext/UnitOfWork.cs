@@ -14,6 +14,8 @@ namespace RealEstate.DAL.DataContext
         private readonly RealEstateDataContext context;
         private Lazy<ICategoryRepository> categories;
         private IPropertyRepository properties;
+        private IPropertyTypeRepository propertyTypes;
+
 
         public UnitOfWork(RealEstateDataContext context) 
         {
@@ -23,6 +25,7 @@ namespace RealEstate.DAL.DataContext
 
         public ICategoryRepository Categories => categories.Value;
         public IPropertyRepository Properties => properties ?? (properties= new PropertyRepository(context));
+        public IPropertyTypeRepository PropertyTypes=> propertyTypes ?? (propertyTypes= new PropertyTypeRepository(context));
 
         public void SaveChanges()
         { 

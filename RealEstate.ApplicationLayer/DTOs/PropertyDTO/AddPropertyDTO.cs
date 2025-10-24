@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstate.ApplicationLayer.DTOs.Property
+namespace RealEstate.ApplicationLayer.DTOs.PropertyDTO
 {
-    public class UpdatePropertyDTO
+    public class AddPropertyDTO
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int CategoryId { get; set; }

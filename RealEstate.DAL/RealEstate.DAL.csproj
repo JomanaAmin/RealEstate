@@ -20,4 +20,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contracts\IGeneralService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RealEstate.DAL\RealEstate.DAL.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstate.ApplicationLayer.Contracts;
-using RealEstate.ApplicationLayer.DTOs.Property;
+using RealEstate.ApplicationLayer.DTOs.PropertyDTO;
 using RealEstate.DAL.Contracts;
 using RealEstate.DAL.Entities;
 using RealEstate.DAL.RepositoryContracts;
@@ -22,6 +22,7 @@ namespace RealEstate.ApplicationLayer.Services
             this.unitOfWork= unitOfWork;
             properties = unitOfWork.Properties;
         }
+        //CREATE
         public async Task<ViewPropertyDetailsDTO> AddPropertyAsync(AddPropertyDTO property)
         {
             Property newProperty = new Property
@@ -67,10 +68,11 @@ namespace RealEstate.ApplicationLayer.Services
             return addedProperty;
         }
 
-        ///NEEDS TO BE COMPLETED 
+        ///DELETE 
         public async Task<ViewPropertyDTO?> DeletePropertyAsync(int id)
         {
             Property? property = await properties.DeleteAsync(id);
+            await unitOfWork.SaveChangesAsync();
             if (property == null) return null;
 
             return new ViewPropertyDTO { 
@@ -78,9 +80,9 @@ namespace RealEstate.ApplicationLayer.Services
                 Description=property.Description,
                 CategoryName=property.Category.Name,
             };
-
         }
 
+        //READ
         //to be continued, the mapping needs to be completed
         public async Task<IEnumerable<ViewPropertyDTO>> GetAllPropertiesAsync()
         {
@@ -97,14 +99,40 @@ namespace RealEstate.ApplicationLayer.Services
                 ).AsNoTracking().ToListAsync();
         }
 
-        public Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id)
+        public async Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            Property? property = await properties.GetByIdAsync(id);
+            if (property == null) return null;
+            return new ViewPropertyDTO { 
+                Name = property.Name,
+                Description=property.Description,
+                CategoryName=property.Category.Name,
+                Price=property.Price,
+                City=property.City,
+                Bathrooms=property.Bathrooms,
+                Rooms=property.Rooms
+            };
         }
 
-        public Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO property)
+        //UPDATE
+        public async Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO property)
         {
-            throw new NotImplementedException();
+            Property updatedProperty = new Property { 
+                Name= property.Name,
+                Description=property.Description,
+
+            };
+            properties.Update(updatedProperty);
+            await unitOfWork.SaveChangesAsync();
+            return new ViewPropertyDTO { 
+                Name=updatedProperty.Name,
+                Description=updatedProperty.Description,
+                Price=updatedProperty.Price,
+                Rooms=updatedProperty.Rooms,
+                Bathrooms=updatedProperty.Bathrooms,
+                CategoryName=updatedProperty.Category.Name
+
+            };
         }
     }
 }

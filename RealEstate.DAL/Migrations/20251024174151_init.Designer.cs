@@ -12,7 +12,7 @@ using RealEstate.DAL.DataContext;
 namespace RealEstate.DAL.Migrations
 {
     [DbContext(typeof(RealEstateDataContext))]
-    [Migration("20251024145751_init")]
+    [Migration("20251024174151_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -44,6 +44,26 @@ namespace RealEstate.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Description = "C1",
+                            Name = "Primary"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Description = "C2",
+                            Name = "Rent"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Description = "C3",
+                            Name = "Resell"
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>
@@ -97,6 +117,7 @@ namespace RealEstate.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PropertyTypeId")

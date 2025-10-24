@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace RealEstate.DAL.Migrations
 {
     /// <inheritdoc />
@@ -48,7 +50,7 @@ namespace RealEstate.DAL.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rooms = table.Column<int>(type: "int", nullable: false),
@@ -96,6 +98,16 @@ namespace RealEstate.DAL.Migrations
                         principalTable: "properties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "categories",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { -3, "C3", "Resell" },
+                    { -2, "C2", "Rent" },
+                    { -1, "C1", "Primary" }
                 });
 
             migrationBuilder.CreateIndex(

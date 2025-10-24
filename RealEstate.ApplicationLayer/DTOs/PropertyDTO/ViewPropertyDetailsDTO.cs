@@ -5,24 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstate.ApplicationLayer.DTOs.Property
+namespace RealEstate.ApplicationLayer.DTOs.PropertyDTO
 {
-    public class ViewPropertyDTO
+    public class ViewPropertyDetailsDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public Category Category { get; set; }
         public string Description { get; set; }
-        public string CategoryName { get; set; }
+        public int CategoryId { get; set; }
         public decimal Price { get; set; }
         public string City { get; set; }
+        public string Address { get; set; }
         public int Rooms { get; set; }
         public int Bathrooms { get; set; }
-        public string PropertyTypeName { get; set; }
+        public int PropertyTypeId { get; set; }
+        public PropertyType PropertyType { get; set; }
         public double AreaSize { get; set; }
         public bool Furnished { get; set; }
         public bool IsAvailable { get; set; }
         public string ContactPhone { get; set; }
         public string ContactWhatsapp { get; set; }
-        public List<PropertyImage> Images { get; set; } //or thumbnail image
+        public DateTime CreatedAt { get; set; }
+
+        public List<PropertyImage> Images { get; set; }
     }
 }

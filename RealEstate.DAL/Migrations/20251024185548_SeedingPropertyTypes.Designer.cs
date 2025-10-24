@@ -12,8 +12,8 @@ using RealEstate.DAL.DataContext;
 namespace RealEstate.DAL.Migrations
 {
     [DbContext(typeof(RealEstateDataContext))]
-    [Migration("20251024150238_Specifiec_Precision_For_Price")]
-    partial class Specifiec_Precision_For_Price
+    [Migration("20251024185548_SeedingPropertyTypes")]
+    partial class SeedingPropertyTypes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,26 @@ namespace RealEstate.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Description = "C1",
+                            Name = "Primary"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Description = "C2",
+                            Name = "Rent"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Description = "C3",
+                            Name = "Resell"
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>
@@ -155,7 +175,27 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyType");
+                    b.ToTable("propertyTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Description = "D1",
+                            Name = "Flat"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Description = "D2",
+                            Name = "Villa"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Description = "D3",
+                            Name = "TownHouse"
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>

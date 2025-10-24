@@ -1,4 +1,4 @@
-﻿using RealEstate.ApplicationLayer.DTOs.Property;
+﻿using RealEstate.ApplicationLayer.DTOs.PropertyDTO;
 using RealEstate.DAL.Entities;
 using System;
 using System.Collections.Generic;

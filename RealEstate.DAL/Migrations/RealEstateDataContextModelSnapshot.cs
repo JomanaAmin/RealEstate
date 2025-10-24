@@ -41,6 +41,26 @@ namespace RealEstate.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Description = "C1",
+                            Name = "Primary"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Description = "C2",
+                            Name = "Rent"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Description = "C3",
+                            Name = "Resell"
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>
@@ -152,7 +172,27 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyType");
+                    b.ToTable("propertyTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Description = "D1",
+                            Name = "Flat"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Description = "D2",
+                            Name = "Villa"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Description = "D3",
+                            Name = "TownHouse"
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>
