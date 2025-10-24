@@ -41,9 +41,9 @@ namespace RealEstate.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(int id,UpdatePropertyDTO property) 
+        public async Task<IActionResult> Update(UpdatePropertyDTO property) 
         {
-            var updatedProperty = await propertyService.UpdatePropertyAsync(id,property);
+            var updatedProperty = await propertyService.UpdatePropertyAsync(property);
             return Ok(updatedProperty);
         }
     }

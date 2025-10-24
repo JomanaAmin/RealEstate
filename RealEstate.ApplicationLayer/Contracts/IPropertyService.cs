@@ -15,7 +15,7 @@ namespace RealEstate.ApplicationLayer.Contracts
         //Create
         Task<ViewPropertyDetailsDTO> AddPropertyAsync(AddPropertyDTO property);
         //Update
-        Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO property);
+        Task<ViewPropertyDTO> UpdatePropertyAsync(UpdatePropertyDTO property);
         //Delete
         Task<ViewPropertyDTO?> DeletePropertyAsync(int id);
         //Read

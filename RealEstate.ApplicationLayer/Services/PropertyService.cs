@@ -91,6 +91,7 @@ namespace RealEstate.ApplicationLayer.Services
             return await properties.GetAllWithDetailsQueryable().Select(
                 property=> new ViewPropertyDTO 
                 {
+                    Id=property.Id,
                     Name=property.Name,
                     Description=property.Description,
                     CategoryName=property.Category.Name,
@@ -120,11 +121,12 @@ namespace RealEstate.ApplicationLayer.Services
         }
 
         //UPDATE
-        public async Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO propertyDTO)
+        public async Task<ViewPropertyDTO> UpdatePropertyAsync(UpdatePropertyDTO propertyDTO)
         {
-            Property? oldProperty = await properties.GetPropertyAsync(id);
-            if (oldProperty == null) return null; //it does not exist to be updated
-
+            Property? oldProperty = await properties.GetPropertyAsync(propertyDTO.Id);
+            if (oldProperty == null) throw new KeyNotFoundException($"Property with ID {propertyDTO.Id} not found.");
+            //it does not exist to be updated
+            /////
             //it exists, update
             oldProperty.Name = propertyDTO.Name;
             oldProperty.Description = propertyDTO.Description;
@@ -143,7 +145,9 @@ namespace RealEstate.ApplicationLayer.Services
 
             properties.Update(oldProperty);
             await unitOfWork.SaveChangesAsync();
+            oldProperty = await properties.GetPropertyAsync(propertyDTO.Id);//to get the updated property with navigation properties
             return new ViewPropertyDTO { 
+
                 Name=oldProperty.Name,
                 Description=oldProperty.Description,
                 Price=oldProperty.Price,
