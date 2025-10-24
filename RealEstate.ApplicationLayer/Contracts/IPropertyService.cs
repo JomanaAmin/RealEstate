@@ -11,6 +11,7 @@ namespace RealEstate.ApplicationLayer.Contracts
     public interface IPropertyService
     {
         //im going to add basic CRUD operations here 
+
         //Create
         public ViewPropertyDTO AddProperty(AddPropertyDTO property);
         //Update

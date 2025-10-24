@@ -17,6 +17,8 @@ namespace RealEstate.ApplicationLayer.DTOs.Property
         public string City { get; set; }
         public string Address { get; set; }
         public int Rooms { get; set; }
+        public int Bathrooms { get; set; }
+        public int PropertyTypeId { get; set; }
         public double AreaSize { get; set; }
         public bool Furnished { get; set; }
         public bool IsAvailable { get; set; }

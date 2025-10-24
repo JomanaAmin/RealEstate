@@ -44,12 +44,12 @@ namespace RealEstate.DAL.Repositories
              return dbSet.AsQueryable();
         }
 
-        public TEntity? GetByID(TId id)
+        public TEntity? GetById(TId id)
         {
             return this.context.Find<TEntity>(id);
 
         }
-        public async Task<TEntity?> GetByIDAsync(TId id)
+        public async Task<TEntity?> GetByIdsync(TId id)
         {
             return await this.context.FindAsync<TEntity>(id);
 
@@ -65,6 +65,15 @@ namespace RealEstate.DAL.Repositories
             if (entity == null) return null;
             this.context.Remove(entity);
             return entity;
+        }
+        public async Task<long> CountAsync()
+        {
+            return await dbSet.LongCountAsync();
+        }
+
+        public long Count() 
+        {
+            return this.dbSet.LongCount<TEntity>();
         }
     }
 }

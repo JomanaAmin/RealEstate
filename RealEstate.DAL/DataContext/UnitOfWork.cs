@@ -28,5 +28,9 @@ namespace RealEstate.DAL.DataContext
         { 
             context.SaveChanges();
         }
+        public async Task SaveChangesAsync()
+        {
+            await context.SaveChangesAsync();
+        }
     }
 }
