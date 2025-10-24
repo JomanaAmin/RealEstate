@@ -9,9 +9,13 @@ namespace RealEstate.DAL.Contracts
     internal interface IBaseRepository <TEntity,TId> where TEntity : class
     {
         IQueryable<TEntity> GetAllQueryable ();
+        Task<IEnumerable<TEntity>> GetAllAsync ();
         IEnumerable<TEntity> GetAll ();
+        Task<TEntity?> GetByIDAsync(TId id);
         TEntity? GetByID(TId id);
+        Task AddAsync(TEntity entity);
         void Add(TEntity entity);
+        //update & delete cant be async as they happen in memory, save changes is what needs to be async
         void Update(TEntity entity);
         TEntity? Delete(TId id);
 

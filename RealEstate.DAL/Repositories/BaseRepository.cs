@@ -25,18 +25,18 @@ namespace RealEstate.DAL.Repositories
         {
             this.context.Add(entity);
         }
-
-        public TEntity? Delete(TId id)
+        public async Task AddAsync(TEntity entity)
         {
-            var entity=this.context.Find<TEntity>(id);
-            if (entity == null) return null;
-            this.context.Remove(entity);
-            return entity;
+            await this.context.AddAsync(entity);
         }
-
+        
         public IEnumerable<TEntity> GetAll()
         {
             return dbSet.ToList();
+        }
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await dbSet.ToListAsync();
         }
 
         public IQueryable<TEntity> GetAllQueryable()
@@ -46,13 +46,25 @@ namespace RealEstate.DAL.Repositories
 
         public TEntity? GetByID(TId id)
         {
-            return this.context.Find<TEntity>(id); 
+            return this.context.Find<TEntity>(id);
 
         }
+        public async Task<TEntity?> GetByIDAsync(TId id)
+        {
+            return await this.context.FindAsync<TEntity>(id);
 
+        }
+        //update & delete cant be async as they happen in memory, save changes is what needs to be async
         public void Update(TEntity entity)
         {
             this.context.Update(entity);
+        }
+        public TEntity? Delete(TId id)
+        {
+            var entity = this.context.Find<TEntity>(id);
+            if (entity == null) return null;
+            this.context.Remove(entity);
+            return entity;
         }
     }
 }
