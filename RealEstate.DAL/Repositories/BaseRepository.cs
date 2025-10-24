@@ -49,7 +49,7 @@ namespace RealEstate.DAL.Repositories
             return this.context.Find<TEntity>(id);
 
         }
-        public async Task<TEntity?> GetByIdsync(TId id)
+        public async Task<TEntity?> GetByIdAsync(TId id)
         {
             return await this.context.FindAsync<TEntity>(id);
 
@@ -75,5 +75,7 @@ namespace RealEstate.DAL.Repositories
         {
             return this.dbSet.LongCount<TEntity>();
         }
+
+
     }
 }

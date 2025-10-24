@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.ApplicationLayer.DTOs.Property
 {
-    internal class ViewPropertyDetailsDTO
+    public class ViewPropertyDetailsDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

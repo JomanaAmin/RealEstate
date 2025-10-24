@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.DAL.Contracts
 {
-    internal interface IBaseRepository <TEntity,TId> where TEntity : class
+    public interface IBaseRepository <TEntity,TId> where TEntity : class
     {
         IQueryable<TEntity> GetAllQueryable ();
         Task<IEnumerable<TEntity>> GetAllAsync ();

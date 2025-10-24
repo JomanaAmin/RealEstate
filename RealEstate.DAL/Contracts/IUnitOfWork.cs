@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.DAL.Contracts
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork
     {
         public IPropertyRepository Properties { get; }
         public ICategoryRepository Categories { get; }

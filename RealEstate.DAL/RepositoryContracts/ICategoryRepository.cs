@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.DAL.RepositoryContracts
 {
-    internal interface ICategoryRepository: IBaseRepository<Category, int>
+    public interface ICategoryRepository: IBaseRepository<Category, int>
     {
     }
 }
