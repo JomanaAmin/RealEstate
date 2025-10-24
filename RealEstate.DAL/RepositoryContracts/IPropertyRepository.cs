@@ -13,5 +13,7 @@ namespace RealEstate.DAL.RepositoryContracts
 
         Task<Property?> GetPropertyAsync(int id);
         IQueryable<Property> GetAllWithDetailsQueryable();
+        Task<Property?> DeletePropertyAsync(int id);
+
     }
 }

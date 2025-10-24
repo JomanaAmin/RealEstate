@@ -25,6 +25,14 @@ namespace RealEstate.DAL.Repositories
         {
             return dbSet.Include(p=>p.Category).Include(p=>p.PropertyType).AsQueryable();
         }
+        public async Task<Property?> DeletePropertyAsync(int id) 
+        {
+            Property? toBeDeleted = await this.GetPropertyAsync(id);
+            if (toBeDeleted == null) return null;
+            dbSet.Remove(toBeDeleted);
+            return toBeDeleted;
+        }
+
 
     }
 }

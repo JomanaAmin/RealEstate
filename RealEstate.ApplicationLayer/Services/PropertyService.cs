@@ -48,10 +48,13 @@ namespace RealEstate.ApplicationLayer.Services
             };
             await properties.AddAsync(newProperty);
             await unitOfWork.SaveChangesAsync();
+
+            newProperty = await properties.GetPropertyAsync(newProperty.Id);
             ViewPropertyDetailsDTO addedProperty = new ViewPropertyDetailsDTO
             {
                 Id=newProperty.Id,
                 Name=newProperty.Name,
+                Category=newProperty.Category,
                 CategoryId=newProperty.CategoryId,
                 Description=newProperty.Description,
                 Price=newProperty.Price,
@@ -60,6 +63,7 @@ namespace RealEstate.ApplicationLayer.Services
                 Rooms=newProperty.Rooms,
                 Bathrooms=newProperty.Bathrooms,
                 PropertyTypeId=newProperty.PropertyTypeId,
+                PropertyType=newProperty.PropertyType,
                 AreaSize=newProperty.AreaSize,
                 Furnished=newProperty.Furnished,
                 IsAvailable=newProperty.IsAvailable,
@@ -73,15 +77,33 @@ namespace RealEstate.ApplicationLayer.Services
         ///DELETE 
         public async Task<ViewPropertyDTO?> DeletePropertyAsync(int id)
         {
-            Property? property = await properties.DeleteAsync(id);
-            await unitOfWork.SaveChangesAsync();
+            Property? property = await properties.DeletePropertyAsync(id);
             if (property == null) return null;
+            ViewPropertyDTO deletedProperty = new ViewPropertyDTO
+            {
+                Id = property.Id, // Don't forget the ID!
+                Name = property.Name,
+                Description = property.Description,
 
-            return new ViewPropertyDTO { 
-                Name=property.Name,
-                Description=property.Description,
-                CategoryName=property.Category.Name,
+                // Mapped from Eager Loaded Navigation Properties
+                CategoryName = property.Category.Name, // Category is loaded and available
+                PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
+
+                Price = property.Price,
+                City = property.City,
+                Rooms = property.Rooms,
+                Bathrooms = property.Bathrooms,
+                AreaSize = property.AreaSize,
+                Furnished = property.Furnished,
+                IsAvailable = property.IsAvailable,
+                ContactPhone = property.ContactPhone,
+                ContactWhatsapp = property.ContactWhatsapp,
+
+                // Assuming Images is a navigation property on Property
+                Images = property.Images
             };
+            await unitOfWork.SaveChangesAsync();
+            return deletedProperty;
         }
 
         //READ
@@ -91,14 +113,26 @@ namespace RealEstate.ApplicationLayer.Services
             return await properties.GetAllWithDetailsQueryable().Select(
                 property=> new ViewPropertyDTO 
                 {
-                    Id=property.Id,
-                    Name=property.Name,
-                    Description=property.Description,
-                    CategoryName=property.Category.Name,
-                    Price=property.Price,
-                    City=property.City,
-                    Bathrooms=property.Bathrooms,
-                    PropertyTypeName=property.PropertyType.Name
+                    Id = property.Id, // Don't forget the ID!
+                    Name = property.Name,
+                    Description = property.Description,
+
+                    // Mapped from Eager Loaded Navigation Properties
+                    CategoryName = property.Category.Name, // Category is loaded and available
+                    PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
+
+                    Price = property.Price,
+                    City = property.City,
+                    Rooms = property.Rooms,
+                    Bathrooms = property.Bathrooms,
+                    AreaSize = property.AreaSize,
+                    Furnished = property.Furnished,
+                    IsAvailable = property.IsAvailable,
+                    ContactPhone = property.ContactPhone,
+                    ContactWhatsapp = property.ContactWhatsapp,
+
+                    // Assuming Images is a navigation property on Property
+                    Images = property.Images
                 }
                 ).AsNoTracking().ToListAsync();
         }
@@ -107,16 +141,27 @@ namespace RealEstate.ApplicationLayer.Services
         {
             Property? property = await properties.GetPropertyAsync(id);
             if (property == null) return null;
-            return new ViewPropertyDTO { 
-                Id = property.Id,
+            return new ViewPropertyDTO {
+                Id = property.Id, // Don't forget the ID!
                 Name = property.Name,
-                Description=property.Description,
-                CategoryName=property.Category.Name,
-                Price=property.Price,
-                City=property.City,
-                Bathrooms=property.Bathrooms,
-                Rooms=property.Rooms,
-                PropertyTypeName= property.PropertyType.Name
+                Description = property.Description,
+
+                // Mapped from Eager Loaded Navigation Properties
+                CategoryName = property.Category.Name, // Category is loaded and available
+                PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
+
+                Price = property.Price,
+                City = property.City,
+                Rooms = property.Rooms,
+                Bathrooms = property.Bathrooms,
+                AreaSize = property.AreaSize,
+                Furnished = property.Furnished,
+                IsAvailable = property.IsAvailable,
+                ContactPhone = property.ContactPhone,
+                ContactWhatsapp = property.ContactWhatsapp,
+
+                // Assuming Images is a navigation property on Property
+                Images = property.Images
             };
         }
 
@@ -146,15 +191,27 @@ namespace RealEstate.ApplicationLayer.Services
             properties.Update(oldProperty);
             await unitOfWork.SaveChangesAsync();
             oldProperty = await properties.GetPropertyAsync(propertyDTO.Id);//to get the updated property with navigation properties
-            return new ViewPropertyDTO { 
+            return new ViewPropertyDTO {
+                Id = oldProperty.Id, // Don't forget the ID!
+                Name = oldProperty.Name,
+                Description = oldProperty.Description,
 
-                Name=oldProperty.Name,
-                Description=oldProperty.Description,
-                Price=oldProperty.Price,
-                Rooms=oldProperty.Rooms,
-                Bathrooms= oldProperty.Bathrooms,
-                CategoryName= oldProperty.Category.Name
+                // Mapped from Eager Loaded Navigation Properties
+                CategoryName = oldProperty.Category.Name, // Category is loaded and available
+                PropertyTypeName = oldProperty.PropertyType.Name, // PropertyType is loaded and available
 
+                Price = oldProperty.Price,
+                City = oldProperty.City,
+                Rooms = oldProperty.Rooms,
+                Bathrooms = oldProperty.Bathrooms,
+                AreaSize = oldProperty.AreaSize,
+                Furnished = oldProperty.Furnished,
+                IsAvailable = oldProperty.IsAvailable,
+                ContactPhone = oldProperty.ContactPhone,
+                ContactWhatsapp = oldProperty.ContactWhatsapp,
+
+                // Assuming Images is a navigation property on Property
+                Images = oldProperty.Images
             };
         }
     }
