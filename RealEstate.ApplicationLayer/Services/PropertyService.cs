@@ -16,11 +16,13 @@ namespace RealEstate.ApplicationLayer.Services
     {
         private readonly IUnitOfWork unitOfWork;
         private IPropertyRepository properties;
+        private ICategoryRepository categories;
 
         public PropertyService(IUnitOfWork unitOfWork) 
         {
             this.unitOfWork= unitOfWork;
             properties = unitOfWork.Properties;
+            categories = unitOfWork.Categories;
         }
         //CREATE
         public async Task<ViewPropertyDetailsDTO> AddPropertyAsync(AddPropertyDTO property)
@@ -86,7 +88,7 @@ namespace RealEstate.ApplicationLayer.Services
         //to be continued, the mapping needs to be completed
         public async Task<IEnumerable<ViewPropertyDTO>> GetAllPropertiesAsync()
         {
-            return await properties.GetAllQueryable().Select(
+            return await properties.GetAllWithDetailsQueryable().Select(
                 property=> new ViewPropertyDTO 
                 {
                     Name=property.Name,
@@ -94,43 +96,60 @@ namespace RealEstate.ApplicationLayer.Services
                     CategoryName=property.Category.Name,
                     Price=property.Price,
                     City=property.City,
-                    Bathrooms=property.Bathrooms
+                    Bathrooms=property.Bathrooms,
+                    PropertyTypeName=property.PropertyType.Name
                 }
                 ).AsNoTracking().ToListAsync();
         }
 
         public async Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id)
         {
-            Property? property = await properties.GetByIdAsync(id);
+            Property? property = await properties.GetPropertyAsync(id);
             if (property == null) return null;
             return new ViewPropertyDTO { 
+                Id = property.Id,
                 Name = property.Name,
                 Description=property.Description,
                 CategoryName=property.Category.Name,
                 Price=property.Price,
                 City=property.City,
                 Bathrooms=property.Bathrooms,
-                Rooms=property.Rooms
+                Rooms=property.Rooms,
+                PropertyTypeName= property.PropertyType.Name
             };
         }
 
         //UPDATE
-        public async Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO property)
+        public async Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO propertyDTO)
         {
-            Property updatedProperty = new Property { 
-                Name= property.Name,
-                Description=property.Description,
+            Property? oldProperty = await properties.GetPropertyAsync(id);
+            if (oldProperty == null) return null; //it does not exist to be updated
 
-            };
-            properties.Update(updatedProperty);
+            //it exists, update
+            oldProperty.Name = propertyDTO.Name;
+            oldProperty.Description = propertyDTO.Description;
+            oldProperty.Price = propertyDTO.Price;
+            oldProperty.City = propertyDTO.City;
+            oldProperty.Address = propertyDTO.Address; 
+            oldProperty.Rooms = propertyDTO.Rooms;
+            oldProperty.Bathrooms = propertyDTO.Bathrooms;
+            oldProperty.CategoryId = propertyDTO.CategoryId;
+            oldProperty.PropertyTypeId = propertyDTO.PropertyTypeId;
+            oldProperty.AreaSize = propertyDTO.AreaSize;
+            oldProperty.Furnished = propertyDTO.Furnished;
+            oldProperty.IsAvailable = propertyDTO.IsAvailable;
+            oldProperty.ContactPhone = propertyDTO.ContactPhone;
+            oldProperty.ContactWhatsapp = propertyDTO.ContactWhatsapp;
+
+            properties.Update(oldProperty);
             await unitOfWork.SaveChangesAsync();
             return new ViewPropertyDTO { 
-                Name=updatedProperty.Name,
-                Description=updatedProperty.Description,
-                Price=updatedProperty.Price,
-                Rooms=updatedProperty.Rooms,
-                Bathrooms=updatedProperty.Bathrooms,
-                CategoryName=updatedProperty.Category.Name
+                Name=oldProperty.Name,
+                Description=oldProperty.Description,
+                Price=oldProperty.Price,
+                Rooms=oldProperty.Rooms,
+                Bathrooms= oldProperty.Bathrooms,
+                CategoryName= oldProperty.Category.Name
 
             };
         }

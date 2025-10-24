@@ -28,11 +28,23 @@ namespace RealEstate.API.Controllers
            var property= await propertyService.GetPropertyByIdAsync(id);
             return Ok(property);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAll() 
+        {
+            return Ok(await propertyService.GetAllPropertiesAsync());
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) 
         {
             return Ok(await propertyService.DeletePropertyAsync(id));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(int id,UpdatePropertyDTO property) 
+        {
+            var updatedProperty = await propertyService.UpdatePropertyAsync(id,property);
+            return Ok(updatedProperty);
         }
     }
     

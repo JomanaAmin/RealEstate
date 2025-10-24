@@ -1,4 +1,5 @@
-﻿using RealEstate.DAL.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using RealEstate.DAL.Contracts;
 using RealEstate.DAL.DataContext;
 using RealEstate.DAL.Entities;
 using RealEstate.DAL.RepositoryContracts;
@@ -13,5 +14,17 @@ namespace RealEstate.DAL.Repositories
     internal class PropertyRepository : BaseRepository<Property, int>, IPropertyRepository
     {
         public PropertyRepository(RealEstateDataContext context) : base(context) { }
+
+        public async Task<Property?> GetPropertyAsync(int id)
+        { 
+            return await dbSet.Include(p => p.Category)
+            .Include(p => p.PropertyType) 
+            .FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public IQueryable<Property> GetAllWithDetailsQueryable() 
+        {
+            return dbSet.Include(p=>p.Category).Include(p=>p.PropertyType).AsQueryable();
+        }
+
     }
 }

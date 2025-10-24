@@ -10,6 +10,8 @@ namespace RealEstate.DAL.RepositoryContracts
 {
     public interface IPropertyRepository : IBaseRepository<Property, int>
     {
-    
+
+        Task<Property?> GetPropertyAsync(int id);
+        IQueryable<Property> GetAllWithDetailsQueryable();
     }
 }

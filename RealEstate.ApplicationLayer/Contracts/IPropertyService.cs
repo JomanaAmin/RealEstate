@@ -21,5 +21,6 @@ namespace RealEstate.ApplicationLayer.Contracts
         //Read
         Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id);
         Task<IEnumerable<ViewPropertyDTO>> GetAllPropertiesAsync();
+
     }
 }

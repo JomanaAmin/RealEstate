@@ -12,7 +12,7 @@ namespace RealEstate.DAL.Repositories
     internal class BaseRepository <TEntity, TId> : IBaseRepository<TEntity, TId> where TEntity : class
     {
         private readonly RealEstateDataContext context;
-        private readonly DbSet<TEntity> dbSet;
+        protected readonly DbSet<TEntity> dbSet;
 
         public BaseRepository(RealEstateDataContext context) 
         {
