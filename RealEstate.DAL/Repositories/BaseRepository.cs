@@ -23,11 +23,11 @@ namespace RealEstate.DAL.Repositories
 
         public void Add(TEntity entity)
         {
-            this.context.Add(entity);
+            this.dbSet.Add(entity);
         }
         public async Task AddAsync(TEntity entity)
         {
-            await this.context.AddAsync(entity);
+            await this.dbSet.AddAsync(entity);
         }
         
         public IEnumerable<TEntity> GetAll()
@@ -46,26 +46,45 @@ namespace RealEstate.DAL.Repositories
 
         public TEntity? GetById(TId id)
         {
-            return this.context.Find<TEntity>(id);
+            return this.dbSet.Find(id);
 
         }
         public async Task<TEntity?> GetByIdAsync(TId id)
         {
-            return await this.context.FindAsync<TEntity>(id);
+            return await this.dbSet.FindAsync(id);
 
         }
         //update & delete cant be async as they happen in memory, save changes is what needs to be async
         public void Update(TEntity entity)
         {
-            this.context.Update(entity);
+            this.dbSet.Update(entity);
         }
+       
+        /// //////////
+    
         public TEntity? Delete(TId id)
         {
-            var entity = this.context.Find<TEntity>(id);
-            if (entity == null) return null;
-            this.context.Remove(entity);
-            return entity;
+            var entity = this.GetById(id);
+            if (entity != null) 
+            {
+                this.dbSet.Remove(entity);
+                return entity;
+            }
+            return null;
+
         }
+
+        public async Task<TEntity?> DeleteAsync(TId id) 
+        {
+            TEntity? entity = await this.GetByIdAsync(id);
+            if (entity!=null) 
+            {
+                this.dbSet.Remove(entity);
+                return entity;
+            }
+            return null;
+        }
+        /// /////////////////////
         public async Task<long> CountAsync()
         {
             return await dbSet.LongCountAsync();

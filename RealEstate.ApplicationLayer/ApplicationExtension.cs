@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using RealEstate.ApplicationLayer.Contracts;
+using RealEstate.ApplicationLayer.Services;
 
 
 namespace RealEstate.ApplicationLayer

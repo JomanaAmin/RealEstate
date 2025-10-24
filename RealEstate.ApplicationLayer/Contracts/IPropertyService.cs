@@ -13,13 +13,13 @@ namespace RealEstate.ApplicationLayer.Contracts
         //im going to add basic CRUD operations here 
 
         //Create
-        Task<ViewPropertyDetailsDTO> AddProperty(AddPropertyDTO property);
+        Task<ViewPropertyDetailsDTO> AddPropertyAsync(AddPropertyDTO property);
         //Update
-        Task<ViewPropertyDTO> UpdateProperty(int id, UpdatePropertyDTO property);
+        Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO property);
         //Delete
-        Task<ViewPropertyDTO?> DeleteProperty(int id);
+        Task<ViewPropertyDTO?> DeletePropertyAsync(int id);
         //Read
-        Task<ViewPropertyDTO?> GetPropertyById(int id);
-        Task<List<ViewPropertyDTO>> GetAllProperties();
+        Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id);
+        Task<IEnumerable<ViewPropertyDTO>> GetAllPropertiesAsync();
     }
 }

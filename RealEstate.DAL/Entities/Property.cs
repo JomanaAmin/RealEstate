@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace RealEstate.DAL.Entities
         public Category Category { get; set; }
         public string Description { get; set; }
         public int CategoryId { get; set; }
+
+        [Precision(18, 2)]
         public decimal Price { get; set; }
         public string City { get; set; }
         public string Address { get; set; }

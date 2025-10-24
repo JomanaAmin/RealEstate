@@ -1,4 +1,5 @@
-﻿using RealEstate.ApplicationLayer.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using RealEstate.ApplicationLayer.Contracts;
 using RealEstate.ApplicationLayer.DTOs.Property;
 using RealEstate.DAL.Contracts;
 using RealEstate.DAL.Entities;
@@ -21,7 +22,7 @@ namespace RealEstate.ApplicationLayer.Services
             this.unitOfWork= unitOfWork;
             properties = unitOfWork.Properties;
         }
-        public async Task<ViewPropertyDetailsDTO> AddProperty(AddPropertyDTO property)
+        public async Task<ViewPropertyDetailsDTO> AddPropertyAsync(AddPropertyDTO property)
         {
             Property newProperty = new Property
             {
@@ -66,22 +67,42 @@ namespace RealEstate.ApplicationLayer.Services
             return addedProperty;
         }
 
-        public Task<ViewPropertyDTO?> DeleteProperty(int id)
+        ///NEEDS TO BE COMPLETED 
+        public async Task<ViewPropertyDTO?> DeletePropertyAsync(int id)
+        {
+            Property? property = await properties.DeleteAsync(id);
+            if (property == null) return null;
+
+            return new ViewPropertyDTO { 
+                Name=property.Name,
+                Description=property.Description,
+                CategoryName=property.Category.Name,
+            };
+
+        }
+
+        //to be continued, the mapping needs to be completed
+        public async Task<IEnumerable<ViewPropertyDTO>> GetAllPropertiesAsync()
+        {
+            return await properties.GetAllQueryable().Select(
+                property=> new ViewPropertyDTO 
+                {
+                    Name=property.Name,
+                    Description=property.Description,
+                    CategoryName=property.Category.Name,
+                    Price=property.Price,
+                    City=property.City,
+                    Bathrooms=property.Bathrooms
+                }
+                ).AsNoTracking().ToListAsync();
+        }
+
+        public Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<ViewPropertyDTO>> GetAllProperties()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ViewPropertyDTO?> GetPropertyById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ViewPropertyDTO> UpdateProperty(int id, UpdatePropertyDTO property)
+        public Task<ViewPropertyDTO> UpdatePropertyAsync(int id, UpdatePropertyDTO property)
         {
             throw new NotImplementedException();
         }

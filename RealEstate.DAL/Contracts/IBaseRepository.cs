@@ -18,6 +18,8 @@ namespace RealEstate.DAL.Contracts
         //update & delete cant be async as they happen in memory, save changes is what needs to be async
         void Update(TEntity entity);
         TEntity? Delete(TId id);
+        Task<TEntity?> DeleteAsync(TId id);
+
         Task<long> CountAsync();
         long Count();
 
