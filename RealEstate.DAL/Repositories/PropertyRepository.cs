@@ -38,6 +38,37 @@ namespace RealEstate.DAL.Repositories
             return dbSet.Where(p => p.CategoryId == categoryId).Include(p => p.Category).Include(p => p.PropertyType).AsQueryable();
         }
 
+        public IQueryable<Property> GetFilteredQuery(int? categoryId=null, int? propertyTypeId = null, decimal? maxPrice=null, decimal? minPrice=null, int? cityId=null) 
+        {
+            IQueryable<Property> query = dbSet.Include(p => p.Category).Include(p => p.City).Include(p => p.PropertyType);
+            //i created a query that has the whole table, then im gonna check each filter and add it to the query
+            if (categoryId != null)
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+            if (propertyTypeId != null)
+            {
+                query = query.Where(p => p.PropertyTypeId == propertyTypeId);
+            }
+            if (maxPrice != null)
+            {
+                query = query.Where(p => p.Price <= maxPrice);
+            }
+            if (minPrice != null)
+            {
+                query = query.Where(p => p.Price >= minPrice);
+            }
+            if (cityId != null)
+            {
+                query = query.Where(p => p.CityId == cityId);
+            }
+
+
+
+            ///
+            return query.AsQueryable();
+        }
+
 
     }
 }
