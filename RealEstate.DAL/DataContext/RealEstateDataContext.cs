@@ -13,6 +13,8 @@ namespace RealEstate.DAL.DataContext
         public DbSet<Property> properties { get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<PropertyType> propertyTypes { get; set; }
+
+        public DbSet<City> cities { get; set; }
         public RealEstateDataContext(DbContextOptions<RealEstateDataContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,9 +27,9 @@ namespace RealEstate.DAL.DataContext
                 new Category { Id=-3,Name = "Resell", Description = "C3" }
             );
             modelBuilder.Entity<PropertyType>().HasData(
-                new Category { Id=-1,Name = "Flat", Description = "D1" },
-                new Category { Id=-2,Name = "Villa", Description = "D2" },
-                new Category { Id=-3,Name = "TownHouse", Description = "D3" }
+                new PropertyType { Id=-1,Name = "Flat", Description = "D1" },
+                new PropertyType { Id=-2,Name = "Villa", Description = "D2" },
+                new PropertyType { Id=-3,Name = "TownHouse", Description = "D3" }
             );
         }
     }

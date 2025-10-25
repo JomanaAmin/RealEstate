@@ -19,11 +19,12 @@ namespace RealEstate.DAL.Repositories
         { 
             return await dbSet.Include(p => p.Category)
             .Include(p => p.PropertyType) 
+            .Include(p => p.City) 
             .FirstOrDefaultAsync(p => p.Id == id);
         }
         public IQueryable<Property> GetAllWithDetailsQueryable() 
         {
-            return dbSet.Include(p=>p.Category).Include(p=>p.PropertyType).AsQueryable();
+            return dbSet.Include(p=>p.Category).Include(p=>p.PropertyType).Include(p=>p.City).AsQueryable();
         }
         public async Task<Property?> DeletePropertyAsync(int id) 
         {
@@ -31,6 +32,10 @@ namespace RealEstate.DAL.Repositories
             if (toBeDeleted == null) return null;
             dbSet.Remove(toBeDeleted);
             return toBeDeleted;
+        }
+        public IQueryable<Property> GetWithCategory(int categoryId) 
+        {
+            return dbSet.Where(p => p.CategoryId == categoryId).Include(p => p.Category).Include(p => p.PropertyType).AsQueryable();
         }
 
 

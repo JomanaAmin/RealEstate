@@ -34,7 +34,8 @@ namespace RealEstate.ApplicationLayer.Services
                 Description=property.Description,
                 Price=property.Price,
                 City=property.City,
-                Address=property.Address,
+                CityId = property.CityId,
+                Address = property.Address,
                 Rooms=property.Rooms,
                 Bathrooms=property.Bathrooms,
                 PropertyTypeId=property.PropertyTypeId,
@@ -59,6 +60,7 @@ namespace RealEstate.ApplicationLayer.Services
                 Description=newProperty.Description,
                 Price=newProperty.Price,
                 City=newProperty.City,
+                CityId=newProperty.CityId,
                 Address=newProperty.Address,
                 Rooms=newProperty.Rooms,
                 Bathrooms=newProperty.Bathrooms,
@@ -90,7 +92,7 @@ namespace RealEstate.ApplicationLayer.Services
                 PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
 
                 Price = property.Price,
-                City = property.City,
+                CityName = property.City.Name,
                 Rooms = property.Rooms,
                 Bathrooms = property.Bathrooms,
                 AreaSize = property.AreaSize,
@@ -122,7 +124,7 @@ namespace RealEstate.ApplicationLayer.Services
                     PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
 
                     Price = property.Price,
-                    City = property.City,
+                    CityName = property.City.Name,
                     Rooms = property.Rooms,
                     Bathrooms = property.Bathrooms,
                     AreaSize = property.AreaSize,
@@ -151,7 +153,7 @@ namespace RealEstate.ApplicationLayer.Services
                 PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
 
                 Price = property.Price,
-                City = property.City,
+                CityName = property.City.Name,
                 Rooms = property.Rooms,
                 Bathrooms = property.Bathrooms,
                 AreaSize = property.AreaSize,
@@ -177,6 +179,7 @@ namespace RealEstate.ApplicationLayer.Services
             oldProperty.Description = propertyDTO.Description;
             oldProperty.Price = propertyDTO.Price;
             oldProperty.City = propertyDTO.City;
+            oldProperty.CityId = propertyDTO.CityId;
             oldProperty.Address = propertyDTO.Address; 
             oldProperty.Rooms = propertyDTO.Rooms;
             oldProperty.Bathrooms = propertyDTO.Bathrooms;
@@ -201,7 +204,7 @@ namespace RealEstate.ApplicationLayer.Services
                 PropertyTypeName = oldProperty.PropertyType.Name, // PropertyType is loaded and available
 
                 Price = oldProperty.Price,
-                City = oldProperty.City,
+                CityName = oldProperty.City.Name,
                 Rooms = oldProperty.Rooms,
                 Bathrooms = oldProperty.Bathrooms,
                 AreaSize = oldProperty.AreaSize,

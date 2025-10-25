@@ -14,6 +14,7 @@ namespace RealEstate.DAL.RepositoryContracts
         Task<Property?> GetPropertyAsync(int id);
         IQueryable<Property> GetAllWithDetailsQueryable();
         Task<Property?> DeletePropertyAsync(int id);
+        IQueryable<Property> GetFilteredQuery(int? categoryId, int? propertyTypeId, decimal? maxPrice, decimal? minPrice, string? City);
 
     }
 }

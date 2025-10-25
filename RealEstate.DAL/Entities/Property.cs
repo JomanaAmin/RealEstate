@@ -17,7 +17,8 @@ namespace RealEstate.DAL.Entities
 
         [Precision(18, 2)]
         public decimal Price { get; set; }
-        public string City { get; set; }
+        public City City { get; set; }
+        public int CityId { get; set; }
         public string Address { get; set; }
         public int Rooms { get; set; }
         public int Bathrooms { get; set; }

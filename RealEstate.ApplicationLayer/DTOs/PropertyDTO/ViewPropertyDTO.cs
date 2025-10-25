@@ -14,7 +14,7 @@ namespace RealEstate.ApplicationLayer.DTOs.PropertyDTO
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public decimal Price { get; set; }
-        public string City { get; set; }
+        public string CityName { get; set; }
         public int Rooms { get; set; }
         public int Bathrooms { get; set; }
         public string PropertyTypeName { get; set; }
