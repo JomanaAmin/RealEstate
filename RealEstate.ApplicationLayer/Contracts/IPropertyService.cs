@@ -19,7 +19,7 @@ namespace RealEstate.ApplicationLayer.Contracts
         //Delete
         Task<ViewPropertyDTO?> DeletePropertyAsync(int id);
         //Read
-        Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id); //read 1 property by id
+        Task<ViewPropertyDetailsDTO?> GetPropertyByIdAsync(int id); //read 1 property by id
         Task<IEnumerable<ViewPropertyDTO>> GetAllPropertiesAsync(); //get all properties
         //Filtering
         Task <IEnumerable<ViewPropertyDTO>> GetPropertiesByFilterAsync(int? categoryId = null, int? propertyTypeId = null, decimal? maxPrice = null, decimal? minPrice = null, int? cityId = null, int? minBedrooms = null, int? maxBedrooms = null);

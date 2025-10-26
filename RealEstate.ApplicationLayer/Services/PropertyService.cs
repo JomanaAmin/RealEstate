@@ -56,23 +56,14 @@ namespace RealEstate.ApplicationLayer.Services
             await properties.AddAsync(newProperty);
             await unitOfWork.SaveChangesAsync();
             //now it should have an ID
-            List<PropertyImage> images = new List<PropertyImage>();
-            foreach (IFormFile image in property.Images) 
+            if (property.Images != null && property.Images.Any())
             {
-
-                string imageURL= await imageStorageService.SaveImageAsync(image, newProperty.Id);
-                PropertyImage propertyImage = new PropertyImage
-                {
-                    ImageUrl = imageURL,
-                    PropertyId = newProperty.Id,
-                };
-                images.Add(propertyImage);
+                List<PropertyImage> images = await ExtractImagesAsync(property.Images, newProperty);
+                //here i created a list of propertyImages and using the image storage service i saved the images and get their URLs
+                //now i need to save them to the database, i already have the property with its ID, i dont need to update the property again as the images are linked to it via foreign key
+                await propertyImagesRepo.AddImagesRangeAsync(images); // now the images have been added to the database context
+                await unitOfWork.SaveChangesAsync(); // save changes to persist images
             }
-            //here i created a list of propertyImages and using the image storage service i saved the images and get their URLs
-            //now i need to save them to the database, i already have the property with its ID, i dont need to update the property again as the images are linked to it via foreign key
-            await propertyImagesRepo.AddImagesRangeAsync(images); // now the images have been added to the database context
-            await unitOfWork.SaveChangesAsync(); // save changes to persist images
-
 
             newProperty = await properties.GetPropertyAsync(newProperty.Id);
             ViewPropertyDetailsDTO addedProperty = new ViewPropertyDetailsDTO
@@ -100,6 +91,23 @@ namespace RealEstate.ApplicationLayer.Services
             };
             return addedProperty;
         }
+        ///////////method that maps files from list of IFormFile to PropertyImage
+        public async Task<List<PropertyImage>> ExtractImagesAsync(List<IFormFile> IFormImages, Property property) {
+
+            List<PropertyImage> images = new List<PropertyImage>();
+            foreach (IFormFile image in IFormImages)
+            {
+                string imageURL = await imageStorageService.SaveImageAsync(image, property.Id);
+                PropertyImage propertyImage = new PropertyImage
+                {
+                    ImageUrl = imageURL,
+                    PropertyId = property.Id,
+                };
+                images.Add(propertyImage);
+            }
+            return images;
+        }
+       
 
         ///DELETE 
         public async Task<ViewPropertyDTO?> DeletePropertyAsync(int id)
@@ -173,31 +181,32 @@ namespace RealEstate.ApplicationLayer.Services
                 ).AsNoTracking().ToListAsync();
         }
 
-        public async Task<ViewPropertyDTO?> GetPropertyByIdAsync(int id)
+        public async Task<ViewPropertyDetailsDTO?> GetPropertyByIdAsync(int id)
         {
             Property? property = await properties.GetPropertyAsync(id);
             if (property == null) return null;
-            return new ViewPropertyDTO {
-                Id = property.Id, // Don't forget the ID!
+            return new ViewPropertyDetailsDTO
+            {
+                Id = property.Id,
                 Name = property.Name,
+                Category = property.Category,
+                CategoryId = property.CategoryId,
                 Description = property.Description,
-
-                // Mapped from Eager Loaded Navigation Properties
-                CategoryName = property.Category.Name, // Category is loaded and available
-                PropertyTypeName = property.PropertyType.Name, // PropertyType is loaded and available
-
                 Price = property.Price,
-                CityName = property.City.Name,
+                City = property.City,
+                CityId = property.CityId,
+                Address = property.Address,
                 Rooms = property.Rooms,
                 Bathrooms = property.Bathrooms,
+                PropertyTypeId = property.PropertyTypeId,
+                PropertyType = property.PropertyType,
                 AreaSize = property.AreaSize,
                 Furnished = property.Furnished,
                 IsAvailable = property.IsAvailable,
                 ContactPhone = property.ContactPhone,
                 ContactWhatsapp = property.ContactWhatsapp,
-
-                // Assuming Images is a navigation property on Property
-                Image = property.Images.OrderBy(img => img.Id).Select(img => img.ImageUrl).FirstOrDefault()
+                CreatedAt = property.CreatedAt,
+                Images = property.Images
             };
         }
 
@@ -205,9 +214,7 @@ namespace RealEstate.ApplicationLayer.Services
         public async Task<ViewPropertyDTO> UpdatePropertyAsync(UpdatePropertyDTO propertyDTO)
         {
             Property? oldProperty = await properties.GetPropertyAsync(propertyDTO.Id);
-            if (oldProperty == null) throw new KeyNotFoundException($"Property with ID {propertyDTO.Id} not found.");
-            //it does not exist to be updated
-            /////
+            if (oldProperty == null) throw new KeyNotFoundException($"Property with ID {propertyDTO.Id} not found.");//it does not exist to be updated
             //it exists, update
             oldProperty.Name = propertyDTO.Name;
             oldProperty.Description = propertyDTO.Description;
@@ -223,9 +230,27 @@ namespace RealEstate.ApplicationLayer.Services
             oldProperty.IsAvailable = propertyDTO.IsAvailable;
             oldProperty.ContactPhone = propertyDTO.ContactPhone;
             oldProperty.ContactWhatsapp = propertyDTO.ContactWhatsapp;
-
             properties.Update(oldProperty);
             await unitOfWork.SaveChangesAsync();
+            //now we updated all values, lets update the images
+            if (propertyDTO.Images != null && propertyDTO.Images.Any()) 
+            {
+                List<PropertyImage> images = await ExtractImagesAsync(propertyDTO.Images, oldProperty);
+                await propertyImagesRepo.AddImagesRangeAsync(images);
+                await unitOfWork.SaveChangesAsync();
+            }
+            if (propertyDTO.ImagesToDelete!=null && propertyDTO.ImagesToDelete.Any()) 
+            {
+                List<PropertyImage> images = await propertyImagesRepo.DeleteImagesRangeAsync(propertyDTO.ImagesToDelete);
+                foreach (var img in images) 
+                {
+                    await imageStorageService.DeleteImageAsync(img.ImageUrl);
+                }
+                await unitOfWork.SaveChangesAsync();
+
+            }
+
+
             oldProperty = await properties.GetPropertyAsync(propertyDTO.Id);//to get the updated property with navigation properties
             return new ViewPropertyDTO {
                 Id = oldProperty.Id, // Don't forget the ID!

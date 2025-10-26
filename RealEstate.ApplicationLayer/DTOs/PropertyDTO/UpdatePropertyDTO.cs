@@ -25,6 +25,7 @@ namespace RealEstate.ApplicationLayer.DTOs.PropertyDTO
         public bool IsAvailable { get; set; }
         public string ContactPhone { get; set; }
         public string ContactWhatsapp { get; set; }
-        public List<IFormFile> Images { get; set; }
+        public List<IFormFile>? Images { get; set; }
+        public List<int>? ImagesToDelete { get; set; }
     }
 }

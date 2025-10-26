@@ -11,5 +11,7 @@ namespace RealEstate.DAL.RepositoryContracts
     public interface IPropertyImageRepository : IBaseRepository<PropertyImage, int>
     {
         Task AddImagesRangeAsync(IEnumerable<PropertyImage> propertyImages);
+        Task<List<PropertyImage>> DeleteImagesRangeAsync(IEnumerable<int> ids);
+
     }
 }

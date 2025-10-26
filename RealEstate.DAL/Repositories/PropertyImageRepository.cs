@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RealEstate.DAL.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace RealEstate.DAL.Repositories
@@ -19,6 +20,14 @@ namespace RealEstate.DAL.Repositories
         {
             await dbSet.AddRangeAsync(propertyImages);
         }
-
+        public async Task<List<PropertyImage>> DeleteImagesRangeAsync(IEnumerable<int> ids) 
+        {
+            var toBeDeleted = await dbSet.Where(img => ids.Contains(img.Id)).ToListAsync();
+            if (toBeDeleted.Any()) 
+            {
+                dbSet.RemoveRange(toBeDeleted);
+            }
+            return toBeDeleted;
+        }
     }
 }
