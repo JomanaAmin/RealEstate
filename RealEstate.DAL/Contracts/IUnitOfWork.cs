@@ -12,6 +12,8 @@ namespace RealEstate.DAL.Contracts
         public IPropertyRepository Properties { get; }
         public ICategoryRepository Categories { get; }
         public IPropertyTypeRepository PropertyTypes { get; }
+        public ICityRepository Cities { get;  }
+        public IPropertyImageRepository PropertyImages { get; }
         void SaveChanges();
         Task SaveChangesAsync();
 

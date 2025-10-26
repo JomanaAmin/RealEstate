@@ -12,8 +12,8 @@ using RealEstate.DAL.DataContext;
 namespace RealEstate.DAL.Migrations
 {
     [DbContext(typeof(RealEstateDataContext))]
-    [Migration("20251024185548_SeedingPropertyTypes")]
-    partial class SeedingPropertyTypes
+    [Migration("20251026095301_propertyImages")]
+    partial class propertyImages
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,21 +48,80 @@ namespace RealEstate.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -1,
+                            Id = 1,
                             Description = "C1",
                             Name = "Primary"
                         },
                         new
                         {
-                            Id = -2,
+                            Id = 2,
                             Description = "C2",
                             Name = "Rent"
                         },
                         new
                         {
-                            Id = -3,
+                            Id = 3,
                             Description = "C3",
                             Name = "Resell"
+                        });
+                });
+
+            modelBuilder.Entity("RealEstate.DAL.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("cities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Cairo"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Giza"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "6th of October"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Sheikh Zayed"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "New Cairo"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Nasr City"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Maadi"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Heliopolis"
                         });
                 });
 
@@ -87,9 +146,8 @@ namespace RealEstate.DAL.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
@@ -130,6 +188,8 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("CityId");
+
                     b.HasIndex("PropertyTypeId");
 
                     b.ToTable("properties");
@@ -154,7 +214,7 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("PropertyImage");
+                    b.ToTable("propertyImages");
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.PropertyType", b =>
@@ -180,19 +240,19 @@ namespace RealEstate.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = -1,
+                            Id = 1,
                             Description = "D1",
                             Name = "Flat"
                         },
                         new
                         {
-                            Id = -2,
+                            Id = 2,
                             Description = "D2",
                             Name = "Villa"
                         },
                         new
                         {
-                            Id = -3,
+                            Id = 3,
                             Description = "D3",
                             Name = "TownHouse"
                         });
@@ -206,6 +266,12 @@ namespace RealEstate.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RealEstate.DAL.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RealEstate.DAL.Entities.PropertyType", "PropertyType")
                         .WithMany()
                         .HasForeignKey("PropertyTypeId")
@@ -213,6 +279,8 @@ namespace RealEstate.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("City");
 
                     b.Navigation("PropertyType");
                 });

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RealEstate.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,20 @@ namespace RealEstate.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyType",
+                name: "cities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "propertyTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -38,7 +51,7 @@ namespace RealEstate.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PropertyType", x => x.Id);
+                    table.PrimaryKey("PK_propertyTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,7 +64,7 @@ namespace RealEstate.DAL.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rooms = table.Column<int>(type: "int", nullable: false),
                     Bathrooms = table.Column<int>(type: "int", nullable: false),
@@ -67,15 +80,21 @@ namespace RealEstate.DAL.Migrations
                 {
                     table.PrimaryKey("PK_properties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_properties_PropertyType_PropertyTypeId",
-                        column: x => x.PropertyTypeId,
-                        principalTable: "PropertyType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_properties_categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_properties_cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_properties_propertyTypes_PropertyTypeId",
+                        column: x => x.PropertyTypeId,
+                        principalTable: "propertyTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -110,10 +129,40 @@ namespace RealEstate.DAL.Migrations
                     { -1, "C1", "Primary" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "cities",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Cairo" },
+                    { 2, "Giza" },
+                    { 3, "6th of October" },
+                    { 4, "Sheikh Zayed" },
+                    { 5, "New Cairo" },
+                    { 6, "Nasr City" },
+                    { 7, "Maadi" },
+                    { 8, "Heliopolis" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "propertyTypes",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { -3, "D3", "TownHouse" },
+                    { -2, "D2", "Villa" },
+                    { -1, "D1", "Flat" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_properties_CategoryId",
                 table: "properties",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_properties_CityId",
+                table: "properties",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_properties_PropertyTypeId",
@@ -136,10 +185,13 @@ namespace RealEstate.DAL.Migrations
                 name: "properties");
 
             migrationBuilder.DropTable(
-                name: "PropertyType");
+                name: "categories");
 
             migrationBuilder.DropTable(
-                name: "categories");
+                name: "cities");
+
+            migrationBuilder.DropTable(
+                name: "propertyTypes");
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using RealEstate.ApplicationLayer.Contracts;
 using RealEstate.ApplicationLayer.Services;
+using RealEstate.DAL.RepositoryContracts;
 
 
 namespace RealEstate.ApplicationLayer
@@ -18,6 +19,8 @@ namespace RealEstate.ApplicationLayer
             service.AddScoped<IPropertyService,PropertyService>();
             service.AddScoped<ICategoryService, CategoryService>();
             service.AddScoped<IPropertyTypeService, PropertyTypeService>();
+            service.AddScoped<ICityService, CityService>();
+            //service.AddScoped<IImageStorageService, ImageStorageService>();
             return service;
         }
     }

@@ -12,8 +12,8 @@ using RealEstate.DAL.DataContext;
 namespace RealEstate.DAL.Migrations
 {
     [DbContext(typeof(RealEstateDataContext))]
-    [Migration("20251024174151_init")]
-    partial class init
+    [Migration("20251025201023_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,65 @@ namespace RealEstate.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RealEstate.DAL.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("cities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Cairo"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Giza"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "6th of October"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Sheikh Zayed"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "New Cairo"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Nasr City"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Maadi"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Heliopolis"
+                        });
+                });
+
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>
                 {
                     b.Property<int>("Id")
@@ -87,9 +146,8 @@ namespace RealEstate.DAL.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
@@ -129,6 +187,8 @@ namespace RealEstate.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("PropertyTypeId");
 
@@ -175,7 +235,27 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyType");
+                    b.ToTable("propertyTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Description = "D1",
+                            Name = "Flat"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Description = "D2",
+                            Name = "Villa"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Description = "D3",
+                            Name = "TownHouse"
+                        });
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.Property", b =>
@@ -186,6 +266,12 @@ namespace RealEstate.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RealEstate.DAL.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RealEstate.DAL.Entities.PropertyType", "PropertyType")
                         .WithMany()
                         .HasForeignKey("PropertyTypeId")
@@ -193,6 +279,8 @@ namespace RealEstate.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("City");
 
                     b.Navigation("PropertyType");
                 });

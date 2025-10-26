@@ -15,6 +15,8 @@ namespace RealEstate.DAL.DataContext
         private Lazy<ICategoryRepository> categories;
         private IPropertyRepository properties;
         private IPropertyTypeRepository propertyTypes;
+        private ICityRepository cities;
+        private IPropertyImageRepository propertyImages;
 
 
         public UnitOfWork(RealEstateDataContext context) 
@@ -26,7 +28,8 @@ namespace RealEstate.DAL.DataContext
         public ICategoryRepository Categories => categories.Value;
         public IPropertyRepository Properties => properties ?? (properties= new PropertyRepository(context));
         public IPropertyTypeRepository PropertyTypes=> propertyTypes ?? (propertyTypes= new PropertyTypeRepository(context));
-
+        public ICityRepository Cities => cities ?? (cities = new CityRepository(context));
+        public IPropertyImageRepository PropertyImages => propertyImages ?? (propertyImages = new PropertyImageRepository(context));
         public void SaveChanges()
         { 
             context.SaveChanges();

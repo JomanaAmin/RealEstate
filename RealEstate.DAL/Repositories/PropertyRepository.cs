@@ -19,12 +19,13 @@ namespace RealEstate.DAL.Repositories
         { 
             return await dbSet.Include(p => p.Category)
             .Include(p => p.PropertyType) 
-            .Include(p => p.City) 
+            .Include(p => p.City)
+            .Include(p=>p.Images)
             .FirstOrDefaultAsync(p => p.Id == id);
         }
         public IQueryable<Property> GetAllWithDetailsQueryable() 
         {
-            return dbSet.Include(p=>p.Category).Include(p=>p.PropertyType).Include(p=>p.City).AsQueryable();
+            return dbSet.Include(p=>p.Category).Include(p=>p.PropertyType).Include(p=>p.City).Include(p => p.Images).AsQueryable();
         }
         public async Task<Property?> DeletePropertyAsync(int id) 
         {
@@ -33,14 +34,10 @@ namespace RealEstate.DAL.Repositories
             dbSet.Remove(toBeDeleted);
             return toBeDeleted;
         }
-        public IQueryable<Property> GetWithCategory(int categoryId) 
+        public IQueryable<Property> GetFilteredQuery(int? categoryId=null, int? propertyTypeId = null, decimal? maxPrice=null, decimal? minPrice=null, int? cityId=null, int? minBedrooms = null, int? maxBedrooms = null) 
         {
-            return dbSet.Where(p => p.CategoryId == categoryId).Include(p => p.Category).Include(p => p.PropertyType).AsQueryable();
-        }
-
-        public IQueryable<Property> GetFilteredQuery(int? categoryId=null, int? propertyTypeId = null, decimal? maxPrice=null, decimal? minPrice=null, int? cityId=null) 
-        {
-            IQueryable<Property> query = dbSet.Include(p => p.Category).Include(p => p.City).Include(p => p.PropertyType);
+            IQueryable<Property> query = dbSet.Include(p => p.Category).Include(p => p.City).Include(p => p.PropertyType).Include(p => p.Images);
+;
             //i created a query that has the whole table, then im gonna check each filter and add it to the query
             if (categoryId != null)
             {
@@ -62,12 +59,19 @@ namespace RealEstate.DAL.Repositories
             {
                 query = query.Where(p => p.CityId == cityId);
             }
-
-
+            if (minBedrooms != null)
+            {
+                query = query.Where(p => p.Rooms >= minBedrooms);
+            }
+            if (maxBedrooms != null)
+            {
+                query = query.Where(p=>p.Rooms<=maxBedrooms);
+            }
 
             ///
             return query.AsQueryable();
         }
+
 
 
     }

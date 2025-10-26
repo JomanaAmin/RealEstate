@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.DAL.DataContext;
 
@@ -11,9 +12,11 @@ using RealEstate.DAL.DataContext;
 namespace RealEstate.DAL.Migrations
 {
     [DbContext(typeof(RealEstateDataContext))]
-    partial class RealEstateDataContextModelSnapshot : ModelSnapshot
+    [Migration("20251025201315_Second")]
+    partial class Second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,7 +214,7 @@ namespace RealEstate.DAL.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("propertyImages");
+                    b.ToTable("PropertyImage");
                 });
 
             modelBuilder.Entity("RealEstate.DAL.Entities.PropertyType", b =>
